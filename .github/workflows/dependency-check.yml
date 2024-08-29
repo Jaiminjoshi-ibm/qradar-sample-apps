@@ -22,11 +22,11 @@ jobs:
           java-version: '11' # Specify the Java version
 
       - name: Run OWASP Dependency Check
-        uses: jeremylong/DependencyCheck@v6.7.0
+        uses: owasp/dependency-check-action@v2.0.0
         with:
           format: 'ALL' # Output formats: XML, JSON, CSV, HTML
-          output-directory: 'dependency-check-report'
-          scan: '.' # Specify the path to scan
+          outputDirectory: 'dependency-check-report'
+          scanPath: '.' # Specify the path to scan
 
       - name: Upload Dependency-Check Report
         if: always()
@@ -34,4 +34,3 @@ jobs:
         with:
           name: dependency-check-report
           path: dependency-check-report
-
