@@ -26,7 +26,10 @@ jobs:
         run: |
           wget https://github.com/jeremylong/DependencyCheck/releases/download/v8.0.2/dependency-check-8.0.2-release.zip
           unzip dependency-check-8.0.2-release.zip
-          sudo mv dependency-check/bin/dependency-check /usr/local/bin/ # Move to a directory in PATH
+          ls -l
+          ls -l dependency-check
+          ls -l dependency-check/bin
+          sudo mv dependency-check/bin/dependency-check /usr/local/bin/
 
       - name: Run OWASP Dependency Check
         run: |
@@ -38,6 +41,7 @@ jobs:
         with:
           name: dependency-check-report
           path: dependency-check-report
+
 
 
 
