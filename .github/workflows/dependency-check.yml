@@ -21,12 +21,15 @@ jobs:
         with:
           java-version: '11' # Specify the Java version
 
+      - name: Install OWASP Dependency Check
+        run: |
+          wget https://github.com/jeremylong/DependencyCheck/releases/download/v8.0.2/dependency-check-8.0.2-release.zip
+          unzip dependency-check-8.0.2-release.zip
+          export PATH=$PATH:$PWD/dependency-check/bin
+
       - name: Run OWASP Dependency Check
-        uses: owasp/dependency-check-action@v2.0.0
-        with:
-          format: 'ALL' # Output formats: XML, JSON, CSV, HTML
-          outputDirectory: 'dependency-check-report'
-          scanPath: '.' # Specify the path to scan
+        run: |
+          dependency-check --project my-project --scan . --format ALL --out dependency-check-report
 
       - name: Upload Dependency-Check Report
         if: always()
@@ -34,3 +37,4 @@ jobs:
         with:
           name: dependency-check-report
           path: dependency-check-report
+
