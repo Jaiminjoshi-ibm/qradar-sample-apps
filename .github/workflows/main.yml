@@ -1,0 +1,26 @@
+name: Trivy Code Scan
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+
+    - name: Run Trivy scan on repository
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        path: '.'
+        format: 'table'
+        exit-code: '1'
+        ignore-unfixed: true
