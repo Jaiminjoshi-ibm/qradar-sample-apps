@@ -26,11 +26,14 @@ jobs:
         run: |
           wget https://github.com/jeremylong/DependencyCheck/releases/download/v8.0.2/dependency-check-8.0.2-release.zip
           unzip dependency-check-8.0.2-release.zip
-          sudo mv dependency-check/bin/dependency-check /usr/local/bin/
+          ls -l
+          ls -l dependency-check
+          ls -l dependency-check/bin
+          sudo mv dependency-check/bin/dependency-check /usr/local/bin/ || { echo "Dependency-Check binary not found"; exit 1; }
 
       - name: Run OWASP Dependency Check
         run: |
-          dependency-check --config ./path/to/dependency-check.yml
+          dependency-check --project my-project --scan . --format ALL --out dependency-check-report
 
       - name: Upload Dependency-Check Report
         if: always()
@@ -38,4 +41,5 @@ jobs:
         with:
           name: dependency-check-report
           path: dependency-check-report
+
 
