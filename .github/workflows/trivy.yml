@@ -1,10 +1,7 @@
 name: Trivy Filesystem Scan
 
 on:
-  push:  # Trigger the workflow on every push to any branch
-    branches:
-      - '**'
-  workflow_dispatch:
+  workflow_dispatch:  # Enables manual triggering of the workflow
 
 jobs:
   trivy_scan_fs:
@@ -14,10 +11,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run Trivy scan on filesystem
-        uses: aquasecurity/trivy-action@v0.8.0
+        uses: aquasecurity/trivy-action@v0.11.0  # Correct version
         with:
           scan-type: 'fs'               # Scan type 'fs' indicates a filesystem scan
           format: 'table'               # Output format of the results
           severity: 'HIGH,CRITICAL'     # Only show HIGH and CRITICAL vulnerabilities
           ignore-unfixed: true          # (Optional) Ignore vulnerabilities that do not have a fix yet
-
