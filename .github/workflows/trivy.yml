@@ -1,19 +1,30 @@
-name: Trivy Filesystem Scan
-
+name: build
 on:
-  workflow_dispatch:  # Enables manual triggering of the workflow
-
+  push:
+    branches: [ "master" ]
+  pull_request:
+  workflow_dispatch:
 jobs:
-  trivy_scan_fs:
-    runs-on: ubuntu-latest
+  build:
+    name: Build
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Run Trivy scan on filesystem
-        uses: aquasecurity/trivy-action@v0.11.0  # Correct version
+      - name: Run Trivy vulnerability scanner in repo mode
+        uses: aquasecurity/trivy-action@0.20.0
         with:
-          scan-type: 'fs'               # Scan type 'fs' indicates a filesystem scan
-          format: 'table'               # Output format of the results
-          severity: 'HIGH,CRITICAL'     # Only show HIGH and CRITICAL vulnerabilities
-          ignore-unfixed: true          # (Optional) Ignore vulnerabilities that do not have a fix yet
+          scan-type: 'fs'
+          ignore-unfixed: true
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL'
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+
+
+
+
