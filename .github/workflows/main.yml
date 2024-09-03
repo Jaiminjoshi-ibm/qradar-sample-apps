@@ -25,7 +25,7 @@ jobs:
           curl -fL https://getcli.jfrog.io | sh
           chmod +x jfrog
           ./jfrog config add my-artifactory \
-            --artifactory-url=${{ secrets.JFROG_URL }} \
+            --url=${{ secrets.JFROG_URL }} \
             --user=${{ secrets.ARTIFACTORY_USER }} \
             --password=${{ secrets.ARTIFACTORY_API_KEY }}
 
