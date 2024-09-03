@@ -35,3 +35,7 @@ jobs:
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Trivy scan results to JFrog Artifactory
+        run: |
+          curl -vvv -H "X-JFrog-Art-Api:${{ secrets.ARTIFACTORY_API_KEY}}" -X PUT ${{ secrets.JFROG_URL }} -F "file=@trivy-results/trivy-result.json"
