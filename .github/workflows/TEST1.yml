@@ -26,7 +26,9 @@ jobs:
       - name: Run Trivy Scan
         run: |
           mkdir -p trivy-results
-          trivy fs --format json --output trivy-results/scan-results.json .
+          trivy fs --format json --output scan-results.json .
+          touch test.json
+          cp scan-results.json test.json
 
       - name: Commit Trivy Scan Results
         run: |
@@ -38,4 +40,4 @@ jobs:
 
       - name: Upload Trivy scan results to JFrog Artifactory
         run: |
-          curl -vvv -H "X-JFrog-Art-Api:${{ secrets.ARTIFACTORY_API_KEY}}" -X PUT ${{ secrets.JFROG_URL }} -F "https://github.com/Jaiminjoshi-ibm/qradar-sample-apps/blob/master/trivy-results/scan-results.json"
+          curl -vvv -H "X-JFrog-Art-Api:${{ secrets.ARTIFACTORY_API_KEY}}" -X PUT ${{ secrets.JFROG_URL }} -T test.json
