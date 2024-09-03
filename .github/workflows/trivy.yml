@@ -19,10 +19,21 @@ jobs:
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'CRITICAL'
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: 'trivy-results.sarif'
+      - name: Install JFrog CLI
+        run: |
+          curl -fL https://getcli.jfrog.io | sh
+          chmod +x jfrog
+          ./jfrog config add my-artifactory \
+            --url=https://artifactory.secintel.intranet.ibm.com/ui/packages \
+            --user=${{ secrets.ARTIFACTORY_USER }} \
+            --password=${{ secrets.ARTIFACTORY_API_KEY }}
+
+      - name: Upload Trivy scan results to JFrog Artifactory
+        run: |
+          ./jfrog rt u trivy-results.sarif /amis-snapshot-local/Test/trivy-results.sarif
+        env:
+          JFROG_CLI_HOME: ${{ runner.temp }}
+
 
 
 
