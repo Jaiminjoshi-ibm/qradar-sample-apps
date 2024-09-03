@@ -24,7 +24,7 @@ jobs:
           curl -fL https://getcli.jfrog.io | sh
           chmod +x jfrog
           ./jfrog config add my-artifactory \
-            --url=https://artifactory.secintel.intranet.ibm.com/ui/packages \
+            --url=https://artifactory.secintel.intranet.ibm.com/artifactory \
             --user=${{ secrets.ARTIFACTORY_USER }} \
             --password=${{ secrets.ARTIFACTORY_API_KEY }}
 
