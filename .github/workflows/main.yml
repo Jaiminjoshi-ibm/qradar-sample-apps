@@ -20,22 +20,17 @@ jobs:
           severity: 'CRITICAL'
           
       - name: Install JFrog CLI
-        run: curl -fL https://getcli.jfrog.io | sh
+        run: |
+          curl -fL https://getcli.jfrog.io | sh
+          chmod +x jfrog
+          ./jfrog config add my-artifactory \
+            --url=https://artifactory.secintel.intranet.ibm.com/artifactory/amis-snapshot-local/Test \
+            --user=${{ secrets.ARTIFACTORY_USER }} \
+            --password=${{ secrets.ARTIFACTORY_API_KEY }}
 
-      - name: Configure JFrog CLI
+      - name: Upload Trivy scan results to JFrog Artifactory
+        run: |
+          ./jfrog rt u trivy-results.sarif /trivy-results.sarif
         env:
           JFROG_CLI_HOME: ${{ runner.temp }}
-          JFROG_CLI_JFROG_URL: ${{ secrets.JFROG_URL }}  # URL of your JFrog Artifactory
-          JFROG_CLI_JFROG_USER: ${{ secrets.ARTIFACTORY_USER }}  # Your JFrog username
-          JFROG_CLI_JFROG_PASSWORD: ${{ secrets.ARTIFACTORY_API_KEY }}  # Your JFrog password
-        run: |
-         
-            --url=$JFROG_CLI_JFROG_URL \
-            --user=$JFROG_CLI_JFROG_USER \
-            --password=$JFROG_CLI_JFROG_PASSWORD
 
-      - name: Upload Trivy results to JFrog Artifactory
-        env:
-          JFROG_CLI_HOME: ${{ runner.temp }}
-        run: |
-          jfrog rt upload "trivy-results.sarif" "/trivy-results.sarif"
