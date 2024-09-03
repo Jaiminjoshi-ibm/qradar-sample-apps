@@ -32,7 +32,7 @@ jobs:
 
       - name: Commit Trivy Scan Results
         run: |
-          git add trivy-results/scan-results.json
+          git add scan-results.json
           git commit -m "Add Trivy scan results"
           git push
         env:
