@@ -19,19 +19,9 @@ jobs:
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'CRITICAL'
-          
-      - name: Install JFrog CLI
-        run: |
-          curl -fL https://getcli.jfrog.io | sh
-          chmod +x jfrog
-          ./jfrog config add my-artifactory \
-            --url=${{ secrets.JFROG_URL }} \
-            --user=${{ secrets.ARTIFACTORY_USER }} \
-            --password=${{ secrets.ARTIFACTORY_API_KEY }}
 
       - name: Upload Trivy scan results to JFrog Artifactory
         run: |
-          ./jfrog rt u trivy-results.sarif artifactory/amis-snapshot-local/Test/trivy-results.sarif
-        env:
-          JFROG_CLI_HOME: ${{ runner.temp }}
+          curl -vvv -H "X-JFrog-Art-Api:${{ secrets.ARTIFACTORY_API_KEY}}" -X PUT ${{ secrets.JFROG_URL }} -F "file=@trivy-result.sarif"
+      
 
