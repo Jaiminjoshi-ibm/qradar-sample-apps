@@ -22,6 +22,6 @@ jobs:
 
       - name: Upload Trivy scan results to JFrog Artifactory
         run: |
-          curl -vvv -H "X-JFrog-Art-Api:${{ secrets.ARTIFACTORY_API_KEY}}" -X PUT ${{ secrets.JFROG_URL }} -F "file=@trivy-result.sarif"
+          curl -vvv -H "X-JFrog-Art-Api:${{ secrets.ARTIFACTORY_API_KEY}}" -X PUT ${{ secrets.JFROG_URL }}/test.sarif -F "file=@trivy-result.sarif"
       
 
